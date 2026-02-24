@@ -1,2 +1,2 @@
 # Organismo-Digital
-Sistema Inteligente Homeostático Digital Análogo al Cerebro
+Sistema de Control Homeostático Digital Análogo al Cerebro
