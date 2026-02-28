@@ -1,4 +1,4 @@
-# Arquitectura de Organismos Digitales v1.3
+# Arquitectura de Organismos Digitales v1.5
 
 Sistema de control inteligente universal inspirado en cognición biológica.
 
