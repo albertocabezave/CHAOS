@@ -259,7 +259,7 @@ El Término, acuñado por Stephen Porges en su Teoría Polivagal(1994), designa 
 No toda la información merece el mismo procesamiento. La atención es el mecanismo que decide que importa más en este momento. El sistema implementa un scheduler de prioridades ponderadas, donde cada sensor tiene un peso de atención definido en el ADN entre 0.0 y 1.0, y la prioridad actual se calcula multiplicando ese peso por el error actual del sensor:
 
 <pre>
-Prioridad(s1) = [peso_atencion(s1) * valor_actual(s1)] - valor_optimo(s1)
+Prioridad(s1) = peso_atencion(s1) * valor_actual(s1) - valor_optimo(s1)
 </pre>
 > El sensor con mayor prioridad determina la acción principal del ciclo.
 
@@ -378,3 +378,37 @@ Así, el historial del sistema no es una secuencia de "estados de ánimo" categ�
 
 ---
 ### 4.4 Cuarta etapa - Modelo del Mundo
+El Modelo del Mundo es la memoria y la imaginación del organismo. Tiene dos componetes que trabajan juntos:
+El log de eventos registra lo que realmente pasó, y el predictor estima lo que debería pasar basándose en ese historial.
+
+La base científica es el Principio de Energía Libre de Karl Friston(2010[mi gran amigo que nunca he conocido :smile:]), que postula que el cerebro no es un receptor pasivo de información sino un generador activo de preducciones. En cada momento, el cerebro tiene un modelo del mundo que predice qué debería estar sintiendo. La diferencia entre lo predicho y lo percibido -el error de predicción(como en los PID)- es la señal de aprendizaje más poderosa del sistema nervioso.
+
+El sistema implementa esta predicción mediante promedio móvil exponencial, que pondera más los eventos recientes que los antiguos sin necesitar almacenar todo el historial(¿si ya hace mucho hubo un terremoto, pero ayer no, porqué debería estar prediciendo que ocurrirá uno en este momento?). Bien, eso dependerá de cómo lo hallamos configurado en el ADN(a), pues, siempre se puede ser paranóico en casos específicos, la idea es que el sistema sirva para cualquier organismo, sin más que decir por ahora... He aquí la fórmula:
+
+<pre>
+predicción(t) = a * valor(t-1) + (1-a) * prediccion(t-1)
+</pre>
+> a E(0,1) - Valores altos priorizan el presente, valores bajos priorizan el historial.
+
+Si la fórmula te pareció ilegible, no te preocupes, el conocimiento es para compartir, no para esconder... Aquí tienes la misma en el idioma de los humanos(como yo :smile:).
+
+<pre>
+prediccion = 0.2 * (lo_que_paso_ayer) + 0.8 * (toda_mi_experienca)
+</pre>
+
+> Como puedes ver claramente si le das mas peso a lo que paso ayer que a toda la experiencia, el sistema aprende rápido pero también olvida rápido. Y si haces lo contrario, pues pasa lo opuesto, el sistema es mas estable pero tarda más para detectar cambios reales en el entorno. Capisci?
+
+El error de predicción es la señal que alimenta la Motivación. Un error alto no solo indica que algo inesperado ocurrió, indica que el modelo del mundo era incorrecto y necesita actualizarse. Eso es Aprendizaje: Cada ciclo, el organismo ajusta su modelo para predecir mejor el siguiente.
+
+El log de eventos almacena tuplas estructuradas que permiten consultas durante el estado de Displacer:
+
+<pre>
+evento = (timestap, sensor, valor, emoción, acción_tomada, error_prediccion)
+</pre>
+> Los datos se promedian en ventanas diarias para construir el historial a largo plazo.
+---
+> El cerebro es una máquina de predicción. Sus sensaciones no son datos crudos del mundo - Son el residuo entre lo que esperaba y lo que encontró.<br><br>
+-Karl Friston, The free-energy principle: a unified brain theory, Nature Reviews Neurosciense, 2010.
+
+### 4.5 Quinta etapa - Motivación
+> En desarrollo :smile:
