@@ -8,7 +8,7 @@ Sistema de control inteligente universal inspirado en cognición biológica.
 - **SOMA/** — Motor de procesamiento. Define cómo piensa y actúa.
 - **MUNDO/** — Entorno sensorial. Define dónde vive.
 
-## Caso de uso activo
+## Caso de uso en desrrollo
 
 Granja de codornices japonesas ponedoras(ROBUSTO'S) — El Vigía, Venezuela.
 
