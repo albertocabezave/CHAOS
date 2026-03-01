@@ -1,6 +1,4 @@
-# Arquitectura de Organismos Digitales v1.5
-
-Sistema de control inteligente universal inspirado en cognición biológica.
+# Arquitectura de Chaos - Framework de control universal con arquitectura de procesamiento dual inspirada en la cognición biológica. v1.5
 
 ## Capas del sistema
 
