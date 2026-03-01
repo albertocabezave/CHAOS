@@ -1,4 +1,4 @@
-# Chaos - Framework de control universal con arquitectura de procesamiento dual inspirada en la cognición biológica. v1.5
+# Chaos - Framework de Control Universal con arquitectura de procesamiento Dual inspirada en la Cognición Biológica. v1.5
 
 ## Capas del sistema
 
