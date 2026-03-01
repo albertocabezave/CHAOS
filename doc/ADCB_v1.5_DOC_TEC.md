@@ -1,5 +1,5 @@
 ***
-# ARQUITECTURA DE CHAOS
+# <span style= "color: #d8200cff;">ARQUITECTURA DE CHAOS</span>
 ### Versión 1.5
 ***
 ## Arquitectura de procesamiento Dual inspirada en la Cognición Biológica.
@@ -517,40 +517,175 @@ La solución ya está incorporada en la fórmula de la Tercera etapa: El paráme
 
 ---
 
+## 6. El AND v1.5 - Estructura completa
+El ADN versión 1.5 incorpora todos los nuevos elementos manteniendo la filosofía central. Todo lo que define el comportamiento del sistema de control está en el archivo de configuración. El SOMA no tiene valores harcodeados. Si un parámetro afecta el comportamiento, está en el ADN.
 
+### 6.1 Nuevos Campos en el ADN v1.5
+|Campo Nuevo|Descripción y Justificación|
+|---|---|
+|schema_version: "1.5"|Campo de control de versiones. El SOMA lee este campo para saber qué estructura esprar y validar en el ADN antes de ejecutarse. Garantiza compatibilidad hacia atrás con ADNs anteriores.|
+|sensor.crítico: true/false|Indica si este sensor debe ser monitoreado por el Ciclo Reptil. Solo los sensores críticos se evalúan a 100Hz. Los no críticos solo los procesa el cognitivo a 1Hz.|
+|reflejos[]|Array de reglas de supervivencia para el Ciclo Reptil. Cada reflejo define: Sensor a vigilar, operador de comparación, umbral, actuador a controlar, valor de la acción, histéresis, tiempo de bloqueo y prioridad.|
+|cognitivo.factor_decaimiento_activación| Inercia del eje de activación entre ciclos. Controla que tán rapido se calma el sistema tras un evento de alta energía.|
+cognitivo.factor_decaimiento_valencia|Inercia del eje valencia entre ciclos. Controla qué tan rápido recupera la neutralidad afectiva tras un estado de displacer.|
+|cognitivo.umbral_activacion_por_error| Define la sensibilidad del sistema: Cuánto error normalizado del sensor genera cuánta activación. Permite calibrar "organismos"(sistemas de control) más o menos reactivos sin cambiar el código.
 
+### 6.2 Estructura de carpetas
 
-
-
-
-
-
-
-
-
-
-<br> <br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-
-
-
-
-
+<pre>
+CHAOS/
+|-- README.md
+|-- .gitignore
+|-- adn/
+|   |-- schema_maestro.json  <- Gramática universal del Sistema
+|   |-- editorADN/src/editorADN.py  <- Editor visual dinámico
+|   |__ industria/.../codornices/
+|       |-- quail_config.json  <- ADN activo v1.5
+|       |__ historial/  <- Snapshots versionados
+|-- soma/
+|   |-- src/
+|   |   |-- soma.py  <- Orquestador: Lanza ambos ciclos.
+|   |   |-- ciclo_reptil.py  <- Ciclo Reptil: 100Hz
+|   |   |-- ciclo_cognitivo.py  <- Ciclo Cognitivo: 1Hz
+|   |   |__ simulador_termico.py  <- Gemelo Digital del Galpón
+|   |-- build/  <- Binarios C++ ignorados por Git
+|   |__ logs/  <- Log orgánico de estados internos
+|-- mundo/
+    |-- ROBUSTOS/  <- Instancia Real - Granja ROBUSTO'S
+    |   |-- inputs/  <- Sensores físicos escriben aquí
+    |   |-- outputs/  <- SOMA escribe estado de actuadores
+    |   |__ estado_reptil/  <- Reflejos activos(Notas del Reptil)
+    |__ gemelo_digital/  <- Instancia simulada(Digital Twin)
+        |-- inputs/estado.json  <- Simulador escribe aquí en JSON
+        |-- outputs/  <- SOMA responde aquí
+        |__ estado_reptil/  <- Reflejos activos en simulación
+</pre>
 
 ---
-#### Porqué este modelo de emociones no tiene precedente directo
+
+## 7. Sobre la Originalidad de esta Arquitectura
+
+Es una pregunta legítima ésta:
+
+Si los principios de esta arquitectura aparecen en la neurociencia de LeDoux, la psicología de Kahneman, la robótica de Brooks y los estándares industriales de AUTOSAR y POSIX. ¿Qué hay aquí que no existía antes?
+
+La respuesta no es que el sistema haya inventado nuevos principios. Los pricipios son tan viejos como la vida misma. Lo que es nuevo es la síntesis y la forma en que esa sítesis está implementada.
+
+Ninguno de los sistemas citados como precedentes combina las siguientes cuatro características:
+
+1. Configuración completa desde datos externos: Los reflejos, los umbrales, la frecuencia de los ciclos, los pesos cognitivos, las reglas de la "especie", todo está en un archivo JSON. No hay valores harcodeados en el motor. En robótica industrial, cambiar los parámetros de una carpeta de subsumption requiere recompilar el software. Aquí, cambiar un reflejo es editar tres líneas de texto.
+
+2. Universalidad de industria sin modificar el motor: El mismo SOMA que controla la temperatura de un galpón de codornices puede, sin una sola línea de código nueva, controlar la presión de una planta de gas, la iluminación de un invernadero, o el movimiento de un brazo robótico. Solo cambia el ADN. Los sistemas industriales existentes son específicos por diseño(no están construidos para ser universales).
+
+3. Arquitectura cognitiva completa con emociones funcionales: Los sistemas SCADA industriales procesan sensores y activan alarmas. Los sistemas de control por lógica difusa calculan acciones suavizadas. Ninguno implementa un ciclo cognitivo con emociones funcionales, modelo del mundo predictivo, atención ponderada y motivación basada en error de predicción de recompensa. Los sistemas IA que sí lo hacen no están diseñados para control de hardware físico en tiempo real.
+
+4. Trazabilidad orgánica del estado interno: (El log no registra solo datos) registra el estado emocional, el nivel de motivación, el error de predicción y las acciones tomadas en cada ciclo. Es posible leer el historial del sistema y leer no sólo lo que paso, sino como se "sentía" el sistema de control cuando pasó. Eso no existe en ningún sistema de control industrial conocido.
+
+5. Modelo afectivo bidimensional aplicado a control físico:
 Los sistemas de control industrial no tienen emociones. Los sistemas de IA que sí modelan estados afectivos -como los agentes de reinforcement learning con funciones de recompensa- operan sobre escalares unidimensionales: La recompensa es un número, más alto es mejor. No tienen unplano bidimensional con activación y valencia independientes.
-
 Los modelos computacionales del afecto que sí usan el espacio bidimensional de Russell existen en psicología computacional y en síntesis de comportamiento de prsonajes virtuales para videojuegos y simulaciones. Pero ninguno de esos sistemas está conectado a hardware físico real, ni usa las emociones como mecanismo de control de actuadores, ni las configura desde un ADN externo que puede cambiar sin tocar el código.
-
 Lo que este sistema hace -usar el modelo circumplejo como mecanismo de control de un organismo hecho con hardware físico real, configurable desde datos- no está documentado en ningún sistema de control conocido. Y esa conexión específica, hasta donde se puede verificar, no existe implementada en ningún otro lugar(Ni aún en este sistema se ha testeado...).
+
+Esta combinación específica(universalidad por datos, ciclo dual de prioridades, cognicion con emociones fundamentales, trazabilidad orgánica y modelo afectivo bidimensional aplicado a control físico) no tiene precedente directo documentado en la literatura de control de sistemas, robótica o inteligencia artificial aplicada a hardware físico.
+
+Esto no significa que el sistema sea definitivo ni que no haya un trabajo similar en desarrollo en algún laboratorio del mundo. Significa que si alguien buscara un sistema de estas características para usar hoy, no lo encontraría construido. Y eso es exactamente lo que este proyecto está haciendo.
+
+---
+
+## 8. Fases de desarrollo
+### Fase 1: Validación en Python
+La fase actual. Objetivo: demostrar que la lógica del sistema dual produce comportamiento correcto y predecible antes de invertir en optimización de bajo nivel. Python permite iteracción rápida y legibilidad del código, esencial para el proyecto que se está construyendo y documentando en paralelo.
+
+El Gemelo Digital(El Simulador Térmico del mi galpón de codornices ROBUSTO'S): Permite probar ambos ciclos con datos físicamente realistas sin necesitar sensores reales. El simulador modela el comportamiento térmico del galpón según las propiedades físicas del cemento de las paredes y techo, los rangos de temperatura reales registrados en El Vigía, y el efecto de cada actuador sobre la temperatura interior.
+
+* schema_maestro.json v1.5: Tipos de sensor, actuador, reflejo y configuración de ciclos.
+
+* quail_config.json v1.5: ADN completo de sistema de control para codornices con reflejos, factor de decaimiento emocional y parámetros de predicción.
+
+* editorADN.py v2.0: Editor dinámico con sección de reflejos y soporte completo del nuevo schema.
+
+* simulador_termico.py: Modelo físico del galpón con modos de temporada normal y calor extremo.
+
+* ciclo_reptil.py: Hilo de alta prioridad con evaluación de reflejos, histéresis y tiempo de bloque por timestap.
+
+* ciclo_cognitivo.py: Hilo normal con las 5 etapas cognitivas y memoria emocional.
+
+* soma.py: Orquestador que carga el ADN, lanza ambos hilos y gestiona el ciclo de vida.
+
+### Fase 2: Integración con hardware real en ROBUSTO'S
+El protocolo de archivos de texto es el puente etre la simulación y la realidad. Para conectar sensores físicos, solo hace falta un script que lea el sensor y escriba su valor en el archivo correspondiente de mundo/ROBUSTOS/inputs/. El SOMA no sabe ni le importa si ese archivo lo escribe el simulador o un microcontrolador físico. La transición no requiere cambios en el motor.
+
+### Fase 3: Kernel Universal en C++ con Garantías de Tiempo Real
+La migración del Ciclo Reptil a C++ con POSIX Real-Time Extensions elimina el fallo del GIL y convierte las garantías de tiempo del Reptil de probabilísticas a deterministas. El Ciclo Cognitivo  puede permanecer en Python o migrar según los recursos disponibles en el hardware destino. El protocolo de archivos permanece idéntico(la únca diferencia es quién escribe y lee los archivos).
+
+---
+## 9. Preguntas Abiertas
+Una arquitectura madura no solo documenta lo que sabe, documenta lo que no sabe. Estas son las preguntas que el sistema aún no ha respondido y que guiarán el desarrollo de versiones futuras:
+
++ ¿Reflejos de prioridad media?: La biología tiene más de dos niveles de procesamiento(el sistema límbico opera entre el tallo cerebral y la corteza). ¿Es necesario un tercer ciclo para respuestas urgentes pero no de emergencia? Por ahora dos niveles son suficientes para el caso de uso actual. Se evaluará con la práctica, como debe ser.
+
++ ¿Aprendizaje de pesos?: Los pesos de atención, emoción y motivación son fijos en el ADN. Una evolución natural es que el sistema los ajuste basándose en la efectividad histórica de sus acciones. Eso requiere un módulo de aprendizaje que aún no está diseñado.
+
++ ¿El Cognitivo debería avisar al usuario si hay una condición temporal que el Reptil no conoce?: Esto se podría solucionar implementando una característica que permita al Cognitivo generar una alerta como:
+    <pre>ALERTA COGNITIVA: Patrón Recurrente detectado.
+    Sensor: DHT""_nidos
+    Hora: 14:00 - 14:45 diariamente.
+    Valor promedio: 38.2°C
+    Sugerencia: Considerar ajustar umbral_reptil o agregar<br>  horario alternativo en el ADN para este rango horario.
+    </pre>
+    El usuario lee esa alerta, va al editor, y agrega un horario de verano en el ADN. El Reptil sigue siendo absoluto: EL Cognitivo sigue sin poder tocarlo. Y el sistema aprende a comunicarse con su operador humano en lugar de intentar resolver solo lo que no le corresponde resolver. El usuario siempre esta en el loop.
+
++ ¿Cómo validar el tiempo real?: Diseñar pruebas de estrés que inyecten fallos deliberados en el Cognitivo y verifiquen que el Reptil sigue respondiendo dentro de los tiempos garantizados. Esto requiere instrumentación de métricas de latencia que aún no están implementadas.
+
+---
+## 10. Bibliografía
+Baars, B.J. (1988): A Cognitive Theory of Consciousness. Cambridge University Press.
+
+Brooks, R.A. (1986):A Robust Layered Control System for a Mobile Robot. IEEE Journal of
+Robotics and Automation.
+
+Craig, A.D. (2002):How do you feel? Interoception: the sense of the physiological condition of
+the body. Nature Reviews Neuroscience.
+
+Damasio, A.R. (1994): Descartes. Error: Emotion, Reason and the Human Brain. Putnam
+Publishing.
+
+Dehaene, S., Changeux, J.P. (2011): Experimental and Theoretical Approaches to Conscious
+Processing. Neuron.
+
+Ewing, J.A. (1881): On the production of transient electric currents in iron and steel conductors
+by twisting them when magnetised or by magnetising them when twisted. Proceedings of the
+Royal Society of London.
+
+Friston, K. (2010): The free-energy principle: a unified brain theory? Nature Reviews Neuroscience.
+
+Kahneman, D. (2011): Thinking, Fast and Slow. Farrar, Straus and Giroux.
+
+LeDoux, J. (1996): The Emotional Brain: The Mysterious Underpinnings of Emotional Life.
+Simon Schuster.
+
+Martin, R.C. (2003): Agile Software Development: Principles, Patterns, and Practices. Prentice
+Hall. (Open/Closed Principle).
+
+Porges, S.W. (1995): Orienting in a Defensive World: Mammalian Modifications of Our
+Evolutionary Heritage.Psychophysiology.
+
+Schultz, W., Dayan, P., Montague, P.R. (1997): A Neural Substrate of Prediction and
+Reward. Science.
+
+Sherrington, C.S. (1906): The Integrative Action of the Nervous System. Yale University Press.
+
+AUTOSAR Consortium (2017): AUTOSAR Classic Platform - Specification of Operating
+System. Release 4.3.1. [www.autosar.org](www.autosar.org).
+
+IEEE Std 1003.1b (1993): POSIX Real-Time Extensions - Portable Operating System
+Interface. Institute of Electrical and Electronics Engineers.
+
+<br><br><br>
+---
+<center style="color: #ffc71fff">
+<br>
+Fin del Documento - Arquitectura de procesamiento Dual inspirada en la Cognición Biológica -  v1.5
+
+Alberto Cabeza | El Vigía, Mérida - Venezuela | 2026
+</center>
