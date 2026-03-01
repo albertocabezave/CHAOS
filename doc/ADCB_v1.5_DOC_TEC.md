@@ -454,13 +454,103 @@ La combinación de estos cuatro cuadrantes del plano circumplejo produce cuatro 
 > La dopamina no codifica el placer. Codifica la predicción del placer. Y cuando la predicción falla -en cualquier dirección- codifica el aprendizaje.<br>
 -Wolfram Schultz, Peter Dayan, P. Read Montague, A neural Substrate of Prediction and Reward, Science, 1997.
 
+
+## 5. Los tres fallos conocidos en esta arquitectura
+Una arquitectur honesta documenta sus limitaciones con la misma precisión que documntas sus fortalezas. Los tres fallos siguientes son conocidos, están comprendidos, y tienen soluciones planificadas. Ninguno invalida el diseño. Todos son inherentes a la fase de implementación actual, no a la arquitectura conceptual.
+
+### 5.1 El GIL de Python y la Independencia imperfecta de los Ciclos
+Python tiene una limitación interna llamada GIL(Global Interpreter Lock). Este mecanismo impide que dos hilos de Python ejecuten código Python simultáneamente en el mismo proceso. Aunque los dos hilos existen y se alternan, solo uno corre a la vez. En la práctica, esto significa que si el Ciclo Cognitvo está en medio de una operación pesada, puede retrasar la ejecución del Ciclo Reptil.
+
+Para el control ambiental de un galpón de codornices, donde los cambios térmicos ocurren en escala de segundos, un retraso ocasional de decenas de segundos en el Reptil no tiene consecuencias prácticas. El problema sería relevante en aplicaciones donde donde los tiempos de respuesta se miden en microsegundos, como en control de motores eléctricos o sistemas de frenado.
+
+La solución definitiva es migrar el Ciclo Reptil a C++ con extensiones de tiempo real POSIX en Linux, o a FreeRTOS en microcontroladores dedicados. En esa configuración, el Ciclo Reptil corre en hardware separado con garantías deterministas, mientras el ciclo cognitivo corre en la computadora principal. La comunicación entre ellos sigue siendo el protocolo de archivos. Un microcontrolador puede escribir en una carpeta compartida por red igual que lo hace el simulador.
+
+<pre>
+* Impacto en fase actual: Bajo - Los cambios térmicos son lentos, el retraso es imperceptible(en teoría).
+* Impacto en aplicaciones críticas: Alto - Inaceptable para control de alta frecuencia.
+
+-> Solución Fase 1: Usar time.sleep() calibrado y mantener el Cognitivo lo mas liviano posible.
+
+-> Solución Fase 2: Ciclo Reptil en C++ con POSIX o microcontrolador con FreeRTOS
+</pre>
+
+### 5.2 La Condición de Carrera entre Ciclos
+Existe un instante teóricamente peligroso: El Reptil acaba de decidir activar un reflejo, pero el Cognitivo ya generó una acción contraria en ese mismo ciclo y está a punto de escrbirla. Los dos ciclos escribiran en el mismo archivo de actuador casi simultáneamente, con resultados impredecibles.
+
+Este problema se llama condición de carrera en programación concurrente. Es uno de los errores más difíciles de detectar porque solo ocurren en el momento exacto en que dos procesos coinciden, y puede no reproducirse en pruebas normales.
+
+La solución implementada tiene tres capas de defensa.
++ Primera: el Cognitivo lee estado_Reptil/ al incio de cada ciclo y omite actuadores comprometidos.
+
++ Segunda: el Reptil escribe su estado antes de escribir en el actuador, garantizando que la nota existe antes de que la acción ocurra.
+
++ Tercera: hay una ventana temporal entre la escritura del reptil y la lectura del cognitivo (dado eque el Reptil corre 100 veces por segundo, el Cognitivo siempre encontrará la nota actuaizada)
+
+Para fases futuras con requisitos mas estrictos, la solución definitiva usa un lock de archivos del sistema operativo, que garantiza acceso esclusivo a nivel de kernel sin necesidad de mecanismos adicionales en el codigo.
+
+<pre>
+* Probabilidad en la fase actual: Muy baja - la diferencia de frecuencia(100:1) hace la coincidencia casi imposible
+
+* Consecuencia si ocurre: Un actuador recibe señales contradictorias en < 10ms -> se resuelve en el siguiente ciclo.
+
+* Solución Fase 1: Protocolo de lectura antes de escritura + ventana temporal natural de 100:1
+
+* File locking a nivel de sistema operativo.
+</pre>
+
+### 5.3 La Amnesia Emocional entre Ciclos
+En la arquitectura anterior, cada ciclo cognitivo comenza sin memoria del estado emocional anterior. Si el sistema de control sintió "miedo" en el ciclo t, en el ciclo t+1 comenzaba emocionalmente neutro, incluso si la situación que causó el miedo no había cambiado. Esto producía un comportamiento poco realista. El sistema reaccionaba con urgencia, dejaba de actuar mientras evaluaba el siguiente ciclo, volvía a detectar la misma situación y reaccionaba de nuevo; sin  continuidad emocional.
+
+En biología esto no ocurre. Si algo te asustó hace diez segundos, tu nivel de cortizol sigue elevado. Tu cuerpo no olvidó el susto porque el reloj avanzó un segundo. Las emociones tienen inercia.
+
+La solución ya está incorporada en la fórmula de la Tercera etapa: El parámetro factor_decaimiento permite que las dos variables emocionales del ciclo anterior(activación y valencia) contribuyan al ciclo actual con peso decreciente e independiente. Con factor_decaimiento = 0.7, una activación de intensidad 1.0 contribuye con 0.7 en el ciclo siguiente, 0.49 en el subsiguiente, y se vuelve despreciable en cinco o seis . Lo mismo ocurre con la valencia. El sistema tiene memoria emocional de corto plazo en ambos ejes, configurables desde el ADN.
+
+<pre>
+* Impacto en fase original: El sistema reaccionaba con urgencia discontinua(sin inercia emocional).
+
+* Solución implementada: factor_decaimiento en el ADN(La emoción decae gradualmente entre ciclos)
+
+* Valor recomendado para codornices: 0.6 a 0.8 (memoria emocional de 3 a 6 ciclos)
+
+* Efecto secundario positivo: El sistema puede desarrollar "anticipación" de eventos recurrentes.
+</pre>
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br> <br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+
+
+
+
+
+
+---
 #### Porqué este modelo de emociones no tiene precedente directo
 Los sistemas de control industrial no tienen emociones. Los sistemas de IA que sí modelan estados afectivos -como los agentes de reinforcement learning con funciones de recompensa- operan sobre escalares unidimensionales: La recompensa es un número, más alto es mejor. No tienen unplano bidimensional con activación y valencia independientes.
 
 Los modelos computacionales del afecto que sí usan el espacio bidimensional de Russell existen en psicología computacional y en síntesis de comportamiento de prsonajes virtuales para videojuegos y simulaciones. Pero ninguno de esos sistemas está conectado a hardware físico real, ni usa las emociones como mecanismo de control de actuadores, ni las configura desde un ADN externo que puede cambiar sin tocar el código.
 
 Lo que este sistema hace -usar el modelo circumplejo como mecanismo de control de un organismo hecho con hardware físico real, configurable desde datos- no está documentado en ningún sistema de control conocido. Y esa conexión específica, hasta donde se puede verificar, no existe implementada en ningún otro lugar(Ni aún en este sistema se ha testeado...).
-
-## 5. Los tres fallos conocidos en esta arquitectura
-> En desarrollo... :smile:
-
