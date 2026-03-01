@@ -407,7 +407,7 @@ El error de predicción es la señal que alimenta la Motivación. Un error alto 
 El log de eventos almacena tuplas estructuradas que permiten consultas durante el estado de Displacer:
 
 <pre>
-evento = (timestap, sensor, valor, emoción, acción_tomada, error_prediccion)
+evento = (timestap, sensor, valor, activación,  valencia, acción_tomada, error_prediccion)
 </pre>
 
 Los valores afectivos(activación y valencia) permiten al sistema consultar su historial, no solo por valor de sensor sino por el estado emocional. Durante el Displacer prolongado, el Modelo del Mundo puede buscar en el log momentos anteriores con valencia negativa similar y comprarar que acciones fueron efectivas entonces. Esa es la base del aprendizaje por experiencia emocional: No es sólo recordar qué paso, sino recordar como se "sentía" el sistema cuando pasó y que funcionó para salir de ese estado.
@@ -461,7 +461,7 @@ Una arquitectur honesta documenta sus limitaciones con la misma precisión que d
 ### 5.1 El GIL de Python y la Independencia imperfecta de los Ciclos
 Python tiene una limitación interna llamada GIL(Global Interpreter Lock). Este mecanismo impide que dos hilos de Python ejecuten código Python simultáneamente en el mismo proceso. Aunque los dos hilos existen y se alternan, solo uno corre a la vez. En la práctica, esto significa que si el Ciclo Cognitvo está en medio de una operación pesada, puede retrasar la ejecución del Ciclo Reptil.
 
-Para el control ambiental de un galpón de codornices, donde los cambios térmicos ocurren en escala de segundos, un retraso ocasional de decenas de segundos en el Reptil no tiene consecuencias prácticas. El problema sería relevante en aplicaciones donde donde los tiempos de respuesta se miden en microsegundos, como en control de motores eléctricos o sistemas de frenado.
+Para el control ambiental de un galpón de codornices, donde los cambios térmicos ocurren en escala de segundos, un retraso ocasional de decenas de milisegundos en el Reptil no tiene consecuencias prácticas. El problema sería relevante en aplicaciones donde donde los tiempos de respuesta se miden en microsegundos, como en control de motores eléctricos o sistemas de frenado.
 
 La solución definitiva es migrar el Ciclo Reptil a C++ con extensiones de tiempo real POSIX en Linux, o a FreeRTOS en microcontroladores dedicados. En esa configuración, el Ciclo Reptil corre en hardware separado con garantías deterministas, mientras el ciclo cognitivo corre en la computadora principal. La comunicación entre ellos sigue siendo el protocolo de archivos. Un microcontrolador puede escribir en una carpeta compartida por red igual que lo hace el simulador.
 
