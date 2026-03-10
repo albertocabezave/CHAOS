@@ -1,7 +1,7 @@
-# 🚦 CHAOS 🚦
-## Framework de Control Universal con arquitectura de procesamiento Dual inspirada en la Cognición Biológica. v1.5
+# ⛈️ 🌪 🚦 CHAOS 🚦 🌪 ⛈️
+## 🧠 🧬 Framework de Control Universal con arquitectura de procesamiento Dual inspirada en la Cognición Biológica. v1.5 🧬 🧠 
 
-## Capas del sistema
+## Capas del sistema 
 
 - **ADN/** — Configuración declarativa (JSON). Define qué es el organismo.
 - **SOMA/** — Motor de procesamiento. Define cómo piensa y actúa.
