@@ -1,5 +1,5 @@
-# ⛈️ 🌪 🚦 CHAOS 🚦 🌪 ⛈️
-## 🧠 🧬 Framework de Control Universal con arquitectura de procesamiento Dual inspirada en la Cognición Biológica. v1.5 🧬 🧠 
+# ⛈️ CHAOS  ⛈️
+## 🧠 🧬 Framework de Control Universal con arquitectura de procesamiento Dual inspirada en la Cognición Biológica. v1.5.
 
 ## Capas del sistema 
 
