@@ -1,7 +1,0 @@
-{
-    "timestamp": "2025-01-01T06:00:00",
-    "temp_calle": 22.0,
-    "humedad_calle": 65.0,
-    "DHT22_nidos": 22.5,
-    "consumo_electrico_maquina": 0.0
-}

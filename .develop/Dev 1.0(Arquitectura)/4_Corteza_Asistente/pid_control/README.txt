@@ -1,1 +1,0 @@
-# Algoritmos de control Fino y optimización.

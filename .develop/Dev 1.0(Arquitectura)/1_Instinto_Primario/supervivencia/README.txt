@@ -1,1 +1,0 @@
-# Lógica de "Moverse o Morir" (Acciones directas)

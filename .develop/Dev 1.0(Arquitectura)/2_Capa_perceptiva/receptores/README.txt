@@ -1,1 +1,0 @@
-# Drivers de sensores (Temperatura, Humedad, CO2)

@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=editorADN
-Comment=Configurador de Especies
-Exec=python3 "/home/alberto/Proyectos/Organismo Digital/Dev 1.3(Arquitectura)/adn/editorADN/src/editorADN.py"
-Icon=utilities-terminal
-Terminal=false
-Type=Application

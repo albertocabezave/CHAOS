@@ -1,1 +1,0 @@
-# Los "Nervios": Aislados del razonamiento.

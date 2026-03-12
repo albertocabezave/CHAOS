@@ -1,1 +1,0 @@
-# El "Hipotálamo": El poder de veto y supervivencia.
