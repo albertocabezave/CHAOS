@@ -1,1 +1,0 @@
-# Corteza (Aprendizaje histórico y tendencias)

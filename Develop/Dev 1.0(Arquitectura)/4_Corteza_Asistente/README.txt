@@ -1,1 +1,0 @@
-# La "Prefrontal": El razonamiento de eficiencia.

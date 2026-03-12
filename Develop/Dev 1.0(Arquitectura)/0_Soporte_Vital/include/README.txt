@@ -1,1 +1,0 @@
-# Definiciones base del núcleo.

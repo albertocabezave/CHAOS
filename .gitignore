@@ -26,3 +26,8 @@ Thumbs.db
 # Build
 build/
 *.bin
+
+# Maldita gemini que da consejos malos y me hizo borrar mi repo
+# Por suerte lo recupere. Les recomiendo lleven su propio control de
+# veriones por si acaso git y la IA y los editores de código les fallan.
+/.develop
