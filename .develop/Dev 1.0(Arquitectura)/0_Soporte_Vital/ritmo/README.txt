@@ -1,0 +1,1 @@
+# Control del PASO_FIJO (Reloj Monotónico).

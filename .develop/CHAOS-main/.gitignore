@@ -27,6 +27,6 @@ Thumbs.db
 build/
 *.bin
 
-# develop (Mi carpeta de control de versiones por si git falla,
-# que ya lo ha hecho...)
+# Develop (Mi carpeta de control de versiones por si git falla,
+# que ya lo ha hecho...
 /Develop

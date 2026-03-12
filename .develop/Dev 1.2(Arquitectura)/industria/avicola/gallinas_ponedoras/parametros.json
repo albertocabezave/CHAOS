@@ -1,0 +1,20 @@
+{
+    "identidad": {
+        "sector": "Avícola",
+        "especifico": "Gallinas Ponedoras",
+        "version_adn": "1.0"
+    },
+    "reptiliano_seguridad": {
+        "temp_critica_alta": 42.0,
+        "temp_critica_baja": 18.0,
+        "protocolo_choque": "STOP_ALL"
+    },
+    "limbico_emocion": {
+        "umbral_sorpresa": 1.5,
+        "sensibilidad_estrés": 0.8
+    },
+    "cortex_estrategia": {
+        "temp_confort": 24.0,
+        "simulacion_activa": true
+    }
+}
