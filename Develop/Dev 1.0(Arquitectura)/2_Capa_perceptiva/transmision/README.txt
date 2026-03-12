@@ -1,0 +1,1 @@
+# Normalización de señales a frecuencias.
