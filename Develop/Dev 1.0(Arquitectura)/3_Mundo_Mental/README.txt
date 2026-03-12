@@ -1,1 +1,0 @@
-El "Gemelo Digital": La simulación posterior.

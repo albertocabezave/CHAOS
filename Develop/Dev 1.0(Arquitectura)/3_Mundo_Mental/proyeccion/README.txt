@@ -1,1 +1,0 @@
-# Predicciones a corto plazo.
